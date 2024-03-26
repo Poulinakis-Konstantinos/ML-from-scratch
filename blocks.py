@@ -19,7 +19,8 @@ class Relu():
 class Neuron():
     '''The neural unit. Performs a weighted sum of its inputs and applies an activation function.'''
     def __init__(self, n_in:int, w:np.array=None, b:float=0, non_lin:bool = True) -> None:
-        # normal distribution over [0, 1), uniform distr.
+        assert isinstance(n_in, int) and n_in > 0, 'Number of inputs must be a positive non-zero integer'
+        
         self.w = np.random.rand(n_in) if w is None else w
         self.b = b
         self.a = Relu() if non_lin else Identity()
