@@ -36,7 +36,7 @@ class Layer():
     def __init__(self, n_in, n_units, **kwargs) -> None:
         self.neurons = [Neuron(n_in=n_in, **kwargs) for _ in range(n_units)]
 
-    def __call__(self, x: np.array) -> np.Any:
+    def __call__(self, x: np.array) -> np.array:
         out = np.array([unit(x) for unit in self.neurons])
         return out
 
@@ -47,7 +47,7 @@ class MLP():
         self.layers = [Layer(sizes[i], sizes[i+1])
                        for i in range(len(n_units))]
 
-    def __call__(self, x: np.array) -> np.Any:
+    def __call__(self, x: np.array) -> np.array:
         for layer in self.layers:
             x = layer(x)
         return x
@@ -84,7 +84,7 @@ class NeuralLayer():
         self.b = np.ones(n_units) if b is None else b
         self.act = Relu() if act is None else act
 
-    def __call__(self, x: np.array) -> np.Any:
+    def __call__(self, x: np.array) -> np.array:
         assert x.shape == (
             self.n_in, ), f"Invalid shape for input x: {x.shape}, expected {(self.n_in,)}"
         return self.act(np.add(np.dot(x, self.w), self.b))
