@@ -1,6 +1,6 @@
 import numpy as np
 import torch.nn as nn  # used only as golden truth for testing
-from torch import tensor # used only as golden truth for testing
+from torch import tensor  # used only as golden truth for testing
 from blocks import Identity, Relu, Neuron, NaiveClassifier, Layer
 
 
@@ -13,6 +13,7 @@ def test_identity():
     input_data = np.random.rand(4, 4)
     assert np.array_equal(identity(input_data), input_data)
 
+
 def test_relu():
     relu = Relu()
     assert relu(5) == 5
@@ -23,7 +24,7 @@ def test_relu():
 def test_neuron():
     n_in = 3
     neuron = Neuron(n_in, non_lin=True, w=np.ones((3)), b=0)
-    assert np.array_equal(neuron.parameters(), np.array([1,1,1,0]))  # params is [w|b]
+    assert np.array_equal(neuron.parameters(), np.array([1, 1, 1, 0]))  # params is [w | b]
 
     torch_neuron = nn.Linear(n_in, 1)
     nn.init.ones_(torch_neuron.weight)
@@ -83,5 +84,6 @@ def test_Layer():
     nn.init.ones_(torch_layer.weight)
     nn.init.zeros_(torch_layer.bias)
 
-    assert  np.array_equal(layer.parameters(), np.array([[1, 1, 1, 0], [1, 1, 1, 0], [1, 1, 1, 0], [1, 1, 1, 0]])) 
-    assert  np.array_equal(layer(x), torch_layer(tensor(x)).detach().numpy())
+    assert np.array_equal(layer.parameters(), np.array([[1, 1, 1, 0], [1, 1, 1, 0], 
+                                                        [1, 1, 1, 0], [1, 1, 1, 0]]))
+    assert np.array_equal(layer(x), torch_layer(tensor(x)).detach().numpy())
