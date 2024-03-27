@@ -20,7 +20,7 @@ class Neuron():
     '''The neural unit. Performs a weighted sum of its inputs and applies an activation function.'''
     def __init__(self, n_in:int, w:np.array=None, b:float=0, non_lin:bool = True) -> None:
         assert isinstance(n_in, int) and n_in > 0, 'Number of inputs must be a positive non-zero integer'
-        
+
         self.w = np.random.rand(n_in) if w is None else w
         self.b = b
         self.a = Relu() if non_lin else Identity()
@@ -50,7 +50,7 @@ class MLP():
         return x 
     
 
-class Classifier():
+class NaiveClassifier():
     '''A simple two class linear classifier (negative, positive classes). Return +1 and 0'''
     def __init__(self) -> None:
         pass

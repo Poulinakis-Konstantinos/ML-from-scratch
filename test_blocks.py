@@ -1,5 +1,5 @@
 import numpy as np
-from blocks import Identity, Relu, Neuron, Classifier
+from blocks import Identity, Relu, Neuron, NaiveClassifier
 
 def test_identity():
     identity = Identity()
@@ -21,15 +21,12 @@ def test_neuron():
     output = neuron(x)
     assert isinstance(output, np.float64)  # Ensure output is of correct type
 
-    # Add more tests for Neuron functionality
-
-
 def test_solve_AND():
     n_in = 2
     x1 = [0, 0, 1, 1]
     x2 = [0, 1, 0, 1]
     y =  np.array([0, 0, 0, 1])
-    clf = Classifier()
+    clf = NaiveClassifier()
 
     # define 1 possible solution
     w=np.array([1, 2])
@@ -48,7 +45,7 @@ def test_solve_OR():
     x1 = [0, 0, 1, 1]
     x2 = [0, 1, 0, 1]
     y =  np.array([0, 1, 1, 1])
-    clf = Classifier()
+    clf = NaiveClassifier()
 
     # define 1 possible solution
     w=np.array([1, 1])
