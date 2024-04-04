@@ -16,6 +16,13 @@ Repo is under ongoing construction.
 - Feedforward Net
 
 ##### engine 
-- A Tensor class
+- A scalar "Tensor" class
 - The Backpropagation algorithm
 
+#### Roadmap: 
+- Design Neuron & FFC layer functionality          &#9745; 
+- Create Scalar "Tensor" class                     &#9745; 
+- Implement backpropagation algo for scalars       &#9745;
+- Expand Tensor class to multiple dimensions       &#9744; 
+- Support backprop for multiple dim tensors        &#9744; 
+- Train Feedforward layer                          &#9744; 
