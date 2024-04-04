@@ -1,12 +1,19 @@
+import numpy as np
+
 
 class Tensor:
     def __init__(self, value, _children=(), _op=None) -> None:
-        self.value = value
+        self.value = value.astype(np.float64) if isinstance(value, np.ndarray)\
+              else np.array((value), dtype=np.float64)
         self.grad = None
         # parameters used to track lineage of the tensor
         self.op = _op
-        self.prev = _children  # previous nodes in the graph
-        self.__grads__ = []
+        self.prev = _children
+
+    def dot(self, other):
+        assert isinstance(
+            other, Tensor), f"Cannot add types {type(self)} and {type(other)}"
+        return Tensor(np.dot(self.value, other.value), _children=(self, other), _op=Tensor._ops('dot'))
 
     def __add__(self, other):
         assert isinstance(
@@ -42,14 +49,16 @@ class Tensor:
                'sub': cls.__sub__,
                'truediv': cls.__truediv__,
                'pow': cls.__pow__,
-               'mul': cls.__mul__}
+               'mul': cls.__mul__,
+               'dot': cls.dot}
         return ops[op]
 
 
 def backward(tensor, _upstream_grad=None):
     assert isinstance(
         tensor, Tensor), f"Cannot perform backward operation on non-type {Tensor}"
-
+    # gradient allocation
+    print(_upstream_grad)
     tensor.grad = Tensor(0) if _upstream_grad is None else _upstream_grad.value
     up = Tensor(1) if _upstream_grad is None else _upstream_grad
     assert isinstance(up, Tensor), f"Upstream gradient not of type {Tensor}"
@@ -58,6 +67,7 @@ def backward(tensor, _upstream_grad=None):
         l1, l2 = __calc_grads__(tensor.op, tensor.prev[0], tensor.prev[1])
         downstream_grad1 = l1 * up
         downstream_grad2 = l2 * up
+        print("L1:", l1,"  d1: ", downstream_grad1)
         backward(tensor.prev[0], downstream_grad1)
         backward(tensor.prev[1], downstream_grad2)
     elif len(tensor.prev) == 1:
@@ -68,6 +78,7 @@ def backward(tensor, _upstream_grad=None):
 
 def __calc_grads__(op, _op1, _op2, _precision=0.000001):
     h = Tensor(_precision)
+    print(f"Op1 {_op1}, Op2 {_op2}")
     local_grad_1 = (op(_op1 + h, _op2) - op(_op1, _op2)) / h
     local_grad_2 = (op(_op1, _op2 + h) - op(_op1, _op2)) / h
     return (local_grad_1, local_grad_2)
@@ -94,3 +105,9 @@ if __name__ == "__main__":
     assert (c.grad - (5)) < er, f"Error in gradient calculation of {c}"
     assert (d.grad - (-2)) < er, f"Error in gradient calculation of {d}"
     assert (e.grad - (-2)) < er, f"Error in gradient calculation of {e}"
+
+    x = Tensor([1, 2, 4])
+    w = Tensor([1, 1, -1])
+    b = Tensor([-1])
+    z = w.dot(x) + b 
+    assert np.array_equal(z.value, np.array([-2.]))
