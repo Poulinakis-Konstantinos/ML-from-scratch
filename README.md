@@ -10,10 +10,12 @@ Repo is under ongoing construction.
 
 ### Implemented:
 
-
-##### architectures
-- Neuron
-- Feedforward Net
+##### ML algorithms
+- N-grams &#9745; 
+  
+##### DL architectures
+- Neuron &#9745; 
+- Feedforward Net &#9745; 
 
 ##### engine 
 - A scalar "Tensor" class
