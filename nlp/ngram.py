@@ -4,6 +4,9 @@ from time import time
 
 
 class NGram():
+    '''The N-Gram model is a Markov Chain that approximates the conditional probability of a word, given a specific pretext,
+    by "looking" back only the last n-1 pretext words. I.e. a trigram approximates the probability of a word by looking only at
+    the previous two words. A 4-gram will look back 3 words and so on...'''
     def __init__(self, n=3, ):
         self.n = n
         self.prob_table = {}
@@ -19,23 +22,23 @@ class NGram():
                 for i in range(self.n, len(tokens)):   # O(M) n of words
                     target = (tokens[i],)
                     #target = (target,)
-                    ngram = tuple(tokens[i-self.n : i])
+                    ngram = tuple(tokens[i-self.n + 1 : i])
                     seq = ngram + target
                     self.f_ngram[ngram] = 1 if ngram not in self.f_ngram.keys() else\
                                         self.f_ngram[ngram]+1 # O(1)
                     self.f_seq[seq] = 1 if seq not in self.f_seq.keys() else\
                                         self.f_seq[seq]+1 # O(1)
                 
-        # Compute the propability table
+        # Compute the probability table
         for seq in self.f_seq.keys():
             ngram = seq[:-1]
             target = seq[-1]
-            prop = self.f_seq[seq] / self.f_ngram[ngram]
+            prob = self.f_seq[seq] / self.f_ngram[ngram]
             
             if ngram in self.prob_table.keys():
-                self.prob_table[ngram].append((target, prop))
+                self.prob_table[ngram].append((target, prob))
             else: 
-                self.prob_table[ngram] = [(target, prop),] 
+                self.prob_table[ngram] = [(target, prob),] 
         
         end = time()
         print(f"Elapsed time: {end - start}s. N-gram trained on {len(self.f_ngram.keys())} ngrams\n")
@@ -63,11 +66,11 @@ if __name__ == "__main__":
     print("Number of sentences :", len(texts),". Number of unique sentences :", len(unique_texts))
     print("Number of words :", len(all_words),". Number of unique words :", len(unique_words), "\n")
 
-    trigram = NGram(n=3)
+    trigram = NGram(n=4)
     trigram.fit(unique_texts)
 
     print(trigram("on the Moon's"))
     # truncation starting from the left 
-    print(trigram("on the Moon's south"))
+    print(trigram("the Moon's south"))
     print(trigram("some jibberish words"))
     print(trigram("two words"))

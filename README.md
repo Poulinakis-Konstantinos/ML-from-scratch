@@ -18,8 +18,8 @@ Repo is under ongoing construction.
 - Feedforward Net &#9745; 
 
 ##### engine 
-- A scalar "Tensor" class
-- The Backpropagation algorithm
+- A scalar "Tensor" class  &#9745; 
+- The Backpropagation algorithm  &#9745; 
 
 #### Roadmap: 
 - Design Neuron & FFC layer functionality          &#9745; 
@@ -28,3 +28,5 @@ Repo is under ongoing construction.
 - Expand Tensor class to multiple dimensions       &#9744; 
 - Support backprop for multiple dim tensors        &#9744; 
 - Train Feedforward layer                          &#9744; 
+- Add smoothing to N-Gram models &#9744; 
+- Implement word2vec paper &#9744; 
